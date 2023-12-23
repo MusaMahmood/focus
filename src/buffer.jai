@@ -1198,6 +1198,7 @@ get_tokenize_function :: (lang: Buffer.Lang) -> Tokenize_Function {
         case .Yang;         return highlight_yang_syntax;
         case .Zig;          return highlight_zig_syntax;
         case .Uxntal;       return highlight_uxntal_syntax;
+        case .Todo;         return highlight_todo_syntax;
     }
     return null;
 }
@@ -1387,6 +1388,7 @@ Buffer :: struct {
         Yang;
         Zig;
         Uxntal;
+        Todo;
     };
 }
 

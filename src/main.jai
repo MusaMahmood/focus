@@ -906,6 +906,7 @@ dont_ignore_next_window_resize := false;
 #load "langs/xml.jai";
 #load "langs/worklog.jai";
 #load "langs/yang.jai";
+#load "langs/todo.jai";
 #load "langs/zig.jai";
 #load "langs/uxntal.jai";
 #load "langs/rust.jai";

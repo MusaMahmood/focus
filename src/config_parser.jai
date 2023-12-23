@@ -222,6 +222,19 @@ map_name_to_color :: (name: string) -> Color {
         case "build_panel_scrollbar_hover";             return .BUILD_PANEL_SCROLLBAR_HOVER;
         case "build_panel_scrollbar_background";        return .BUILD_PANEL_SCROLLBAR_BACKGROUND;
         case "build_panel_title_bar";                   return .BUILD_PANEL_TITLE_BAR;
+        
+        case "todo_default";                            return .TODO_DEFAULT;
+        case "todo_header1";                            return .TODO_HEADER1;
+        case "todo_header2";                            return .TODO_HEADER2;
+        case "todo_milestone";                          return .TODO_MILESTONE;
+        case "todo_critical";                           return .TODO_CRITICAL;
+        case "todo_important";                          return .TODO_IMPORTANT;
+        case "todo_in_progress";                        return .TODO_IN_PROGRESS;
+        case "todo_standard";                           return .TODO_STANDARD;
+        case "todo_low_priority";                       return .TODO_LOW_PRIORITY;
+        case "todo_missed";                             return .TODO_MISSED;
+        case "todo_completed";                          return .TODO_COMPLETED;
+        case "todo_bullet";                             return .TODO_BULLET;
     }
 
     return .NONE;

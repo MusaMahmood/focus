@@ -1201,6 +1201,8 @@ get_lang_from_path :: (path: string) -> Buffer.Lang {
 
             case "yang";
                 lang = .Yang;
+            case "todo";
+                lang = .Todo;
 
             case "zig";
                 lang = .Zig;
@@ -1212,7 +1214,7 @@ get_lang_from_path :: (path: string) -> Buffer.Lang {
 
     path_, basename, _, basename_with_extension := path_decomp(path);
 
-    if equal_nocase(basename, "todo") || equal_nocase(basename_with_extension, "FOCUS-CHANGELOG.txt") {
+    if /*equal_nocase(basename, "todo") ||*/ equal_nocase(basename_with_extension, "FOCUS-CHANGELOG.txt") {
         lang = .Worklog;
     }
 
@@ -3040,6 +3042,7 @@ toggle_comment :: (editor: *Editor, buffer: *Buffer) {
         case .Python;       comment = "#";
         case .RenPy;        comment = "#";
         case .Yang;         comment = "//";
+        case .Todo;         comment = "//";
         case;               return;
     }
 

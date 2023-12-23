@@ -364,6 +364,16 @@ ADDED_COLORS :: Added_Color.[
     .{ 2, "build_panel_scrollbar_hover",      "scrollbar_hover",        "33CCCC4C" },
     .{ 2, "build_panel_scrollbar_background", "scrollbar_background",   "10191F4C" },
     .{ 2, "build_panel_title_bar",            "",                       "1C303AFF" },
+    
+    .{ 2, "todo_header1",                     "", "9568ADFF" },
+    .{ 2, "todo_header2",                     "", "FF80F0FF" },
+    .{ 2, "todo_milestone",                   "", "E0415EFF" },
+    .{ 2, "todo_critical",                    "", "FF0F01FF" },
+    .{ 2, "todo_important",                   "", "FC4E03FF" },
+    .{ 2, "todo_in_progress",                 "", "26B2B2FF" },
+    .{ 2, "todo_standard",                    "", "E0E077FF" },
+    .{ 2, "todo_low_priority",                "", "9EA1687F" },
+    .{ 2, "todo_completed",                   "", "2F495CEF" },
 
     .{ 3, "region_heredoc",                   "background1",            "090e12FF" },
 ];

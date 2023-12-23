@@ -385,3 +385,15 @@ build_panel_scrollbar:                  33CCCC19
 build_panel_scrollbar_hover:            33CCCC4C
 build_panel_scrollbar_background:       10191F4C
 build_panel_title_bar:                  1C303AFF
+
+todo_default:                   BFC9DBFF
+todo_header1:                   9568adff
+todo_header2:                   FF80F0FF
+todo_milestone:                 E0415EFF
+todo_critical:                  FF0F01FF
+todo_important:                 fc4e03FF
+todo_in_progress:               26B2B2FF
+todo_standard:                  E0E077FF
+todo_low_priority:              9EA1687F
+todo_completed:                 2f495cEF
+todo_bullet:                    FF00F0FF

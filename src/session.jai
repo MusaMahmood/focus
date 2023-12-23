@@ -21,7 +21,7 @@ maybe_load_previous_session :: () -> Session {
     session_dirs := get_sorted_session_dirs_tmp();
 
     // Delete old sessions if we have too many
-    {
+    #if 0 {
         num_old_sessions := session_dirs.count - MAX_SESSIONS_TO_STORE;
         if num_old_sessions > 0 {
             for i : 1 .. num_old_sessions {
