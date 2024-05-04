@@ -9,8 +9,8 @@
 // }
 
 // NOTE: Uncomment when releasing, comment out when not releasing
-VERSION :: "0.3.4-3";
-RELEASE_DATE :: "10 April 2024";
+VERSION :: "0.3.4-5";
+RELEASE_DATE :: "4 May 2024";
 
 #run,stallable build();
 
@@ -32,7 +32,7 @@ build :: () {
     set_optimization(*options, .DEBUG);
     options.arithmetic_overflow_check = .FATAL;
     build_dir := "build_debug";
-    options.output_executable_name = "focus";
+    options.output_executable_name = "focus_mod";
 
     for arg: args {
         if arg == {

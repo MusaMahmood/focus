@@ -1199,6 +1199,7 @@ get_tokenize_function :: (lang: Buffer.Lang) -> Tokenize_Function {
         case .Zig;          return highlight_zig_syntax;
         case .Uxntal;       return highlight_uxntal_syntax;
         case .Todo;         return highlight_todo_syntax;
+        case .Build_Window; return highlight_build_output_messages;
     }
     return null;
 }
@@ -1389,6 +1390,7 @@ Buffer :: struct {
         Zig;
         Uxntal;
         Todo;
+        Build_Window;
     };
 }
 
