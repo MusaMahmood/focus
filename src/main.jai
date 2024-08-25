@@ -910,6 +910,7 @@ focus_allocator: Allocator;
 #load "widgets/color_picker.jai";
 
 #load "langs/common.jai";
+#load "langs/compute.jai";
 #load "langs/jai.jai";
 #load "langs/c.jai";
 #load "langs/cpp.jai";

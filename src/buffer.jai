@@ -1281,6 +1281,7 @@ manually_mark_range_as_token :: (buffer: *Buffer, range: Offset_Range, color: Co
 get_tokenize_function :: (lang: Buffer.Lang) -> Tokenize_Function {
     if #complete lang == {
         case .Jai;                  return tokenize_jai;
+        case .Compute;              return tokenize_compute;
         case .C;                    return tokenize_c;
         case .Cpp;                  return tokenize_cpp;
         case .Css;                  return tokenize_css;
@@ -1509,6 +1510,7 @@ Buffer :: struct {
         Plain_Text :: 0;
         Jai;
         C;
+        Compute;
         Cpp;
         Css;
         CSharp;

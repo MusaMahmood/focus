@@ -106,6 +106,16 @@ if __name__ == "__main__":
 
 PYTHON
 
+
+SAMPLE_Compute :: #string LANG_COMPUTE
+// Comment
+/* Multi-line comment */
+// #TODO: This language is a work in progress. 
+// I haven't quite figured out the syntax yet.
+
+LANG_COMPUTE
+
+
 SAMPLE_C :: #string LANG_C
 // Comment
 /* Multi-line comment */

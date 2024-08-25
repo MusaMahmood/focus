@@ -288,6 +288,7 @@ color_preview_height: float = 0.7;
 get_language_sample_text :: (lang: Buffer.Lang) -> string {
     if #complete lang == {
         case .Jai;               return SAMPLE_Jai;
+        case .Compute;           return SAMPLE_Compute;
         case .C;                 return SAMPLE_C;
         case .Cpp;               return SAMPLE_Cpp;
         case .Css;               return SAMPLE_Css;

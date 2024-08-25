@@ -1257,6 +1257,8 @@ get_lang_from_path :: (full_path: string) -> Buffer.Lang {
         case "fx";              lang = .Hlsl;
         case "fxh";             lang = .Hlsl;
 
+        case "compute";         lang = .Compute;
+
         case "c";               lang = .C;
         case "h";               lang = .C;
         case "inl";             lang = .Cpp;
@@ -1291,8 +1293,6 @@ get_lang_from_path :: (full_path: string) -> Buffer.Lang {
             // Files named `.focus_config` are assumed to have no extension
             if equal_nocase(basename_with_extension, ".focus-config") then lang = .Focus_Config;
     }
-
-    // if equal_nocase(basename_with_extension, "FOCUS-CHANGELOG.txt") then lang = .Todo;
 
     return lang;
 }
@@ -3132,6 +3132,7 @@ toggle_comment :: (editor: *Editor, buffer: *Buffer, is_fallback := false) {
 
     if #complete buffer.lang == {
         case .Jai;    #through;
+        case .Compute;  #through;
         case .C;      #through;
         case .Cpp;    #through;
         case .CSharp; #through;
@@ -3344,6 +3345,7 @@ toggle_block_comment :: (editor: *Editor, buffer: *Buffer, is_fallback := false)
 
     if #complete buffer.lang == {
         case .Jai;    #through;
+        case .Compute; #through;
         case .C;      #through;
         case .Cpp;    #through;
         case .Css;    #through;
