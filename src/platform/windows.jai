@@ -217,9 +217,22 @@ platform_get_fonts_dir :: () -> string {
 platform_open_in_explorer :: (path: string, reveal := false) {
     path_backslashes := copy_string(path,, allocator = temp);
     path_overwrite_separators(path_backslashes, #char "\\");
-
-    if reveal run_command("explorer", "/select,", path_backslashes);
-    else      run_command("explorer", path_backslashes);
+    
+    
+    
+    // #TODO: Update to select when FP supports it!
+    if reveal {
+        path_stripped := path_strip_filename(path_backslashes);
+        ShellExecuteW(null, utf8_to_wide_new("open"), utf8_to_wide_new("fp.exe"),
+                    utf8_to_wide_new(path_stripped), null, SW_SHOWNORMAL);
+    } else {
+        ShellExecuteW(null, utf8_to_wide_new("open"), utf8_to_wide_new("fp.exe"),
+                    utf8_to_wide_new(path_backslashes), null, SW_SHOWNORMAL);
+    }
+    
+    // Old version
+    // if reveal run_command("explorer", "/select,", path_backslashes);
+    // else      run_command("explorer", path_backslashes);
 }
 
 platform_path_equals :: inline (path_a: string, path_b: string) -> bool {
