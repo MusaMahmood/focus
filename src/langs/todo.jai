@@ -24,14 +24,13 @@ get_next_token :: (using tokenizer: *Tokenizer) -> Token {
     start_t = t;
 
     // Look at the first char as if it's ASCII (if it isn't, this is just a text line)
-    char := << t;
+    char := t.*;
 
     if char == {
-        case #char "+";  parse_done_line        (tokenizer, *token);
-        case #char "-";  parse_todo_line        (tokenizer, *token);
-        case #char "*";  parse_current_task_line(tokenizer, *token);
-        case #char "#";  parse_header           (tokenizer, *token);
-        case;            parse_line             (tokenizer, *token);
+        // Extended UTF-8 symbols like bullet points:
+        case 0xE2;          parse_extended(tokenizer, *token);
+        case #char "[";     parse_todo    (tokenizer, *token);
+        case;               parse_line    (tokenizer, *token);
     }
 
     if t >= max_t then t = max_t;
@@ -39,32 +38,65 @@ get_next_token :: (using tokenizer: *Tokenizer) -> Token {
     return token;
 }
 
-parse_done_line :: (using tokenizer: *Tokenizer, token: *Token) {
-    token.type = .function;  // not great, but we want to avoid language-specific tokens here
-
+parse_extended :: (using tokenizer: *Tokenizer, token: *Token) {
+    token.type = .function;
+    
+    // #TODO: Can check bytes 2 & 3 to see what kind of character we're seeing.
+    
     t += 1;
     eat_until_newline(tokenizer);
 }
 
-parse_todo_line :: (using tokenizer: *Tokenizer, token: *Token) {
-    token.type = .default;
+parse_todo :: (using tokenizer: *Tokenizer, token: *Token) {
+    old_t := t;
 
-    t += 1;
-    eat_until_newline(tokenizer);
+    eat_until_close_bracket(tokenizer);
+
+    str: string = ---;
+    str.data    = old_t;
+    str.count   = t - old_t;
+
+    str = trim_right(str);
+
+    if t + 1 >= max_t {
+        return;    
+    }
+
+    if ((t+1).* == 93) {
+        token.type = .header2; t = old_t + 2;
+        eat_until_newline(tokenizer); 
+        return;
+    }
+
+    if str.count > 4 {
+        token.type = .header; t = old_t + 1;
+        eat_until_newline(tokenizer); 
+        return;
+    }
+
+    if str == {
+        case "[♦";     token.type = .keyword;
+        case "[!";     token.type = .type; 
+        case "[*";     token.type = .value;     
+        case "[•";     token.type = .modifier;
+        case "[.";     token.type = .attribute;
+        case "[↓";     token.type = .enum_variant;
+        case "[x";     token.type = .macro;
+        case "[~";     token.type = .builtin_variable;
+        // If not a task, then it must be a header.
+        case;          token.type = .comment; t = old_t + 1;
+    }
+
+    eat_until_newline(tokenizer); 
+    // #TODO: Replace this with "until_newline_or_next_token"
+        // That way we can have multiple todo items per line. 
+    // eat_until_newline_or_open_bracket(tokenizer);
 }
 
-parse_current_task_line :: (using tokenizer: *Tokenizer, token: *Token) {
-    token.type = .value;
-
-    t += 1;
-    eat_until_newline(tokenizer);
-}
-
-parse_header :: (using tokenizer: *Tokenizer, token: *Token) {
-    token.type = .header;
-
-    t += 1;
-    eat_until_newline(tokenizer);
+eat_until_close_bracket :: (using tokenizer: *Tokenizer) {
+    while t < max_t && t.* != #char "]" {
+        t += 1;
+    }
 }
 
 parse_line :: (using tokenizer: *Tokenizer, token: *Token) {
