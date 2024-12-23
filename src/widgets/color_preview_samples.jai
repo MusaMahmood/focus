@@ -884,15 +884,40 @@ LANG_HTML
 
 
 SAMPLE_Todo :: #string LANG_TODO
-# Header
+[[Demo]]
 
-+ Item 1 done
-+ Item 2 done
-    + Subitem 1 done
-    + Subitem 2 done
-    - Subitem 3 to do
-* Item 3 - work in progress
-- Item 4 to do
+Mapping:
+    Extended symbols (bullet points, etc): .function
+    [ ] .comment
+    [~] .builtin_variable
+    [x] .macro
+    [↓] .enum variant
+    [.] .attribute
+    [•] .modifier
+    [*] .value
+    [!] .type
+    [♦] .keyword
+
+[[Top level header]]
+[Secondary header]
+[x] Completed task
+    [x] Completed task
+[♦] Milestone task (Alt+4 for diamond)
+[!] Critical task / Immediate priority
+[*] Important task / High priority
+    [^] Prerequisite for above task
+[ ] Default priority task
+[•] Task currently in progress (Alt+7 for bullet)
+[.] Same as above.
+[↓] Low priority task (Alt+Num2Num5 for down arrow)
+[~] Didn't complete or
+
+• Bullet points
+♦ Bullet point
+○ Bullet poin
+→ Another bullet
+Non-bullet point comment
+
 
 LANG_TODO
 
