@@ -1344,6 +1344,8 @@ get_lang_from_path :: (full_path: string) -> Buffer.Lang {
         case "shlib";           lang = .Shell;
         case "bash";            lang = .Shell;
         case "zsh";             lang = .Shell;
+        
+        case "todo";            lang = .Todo;
 
         case "ini";             lang = .Ini;
 
@@ -1352,7 +1354,7 @@ get_lang_from_path :: (full_path: string) -> Buffer.Lang {
             if equal_nocase(basename_with_extension, ".focus-config") then lang = .Focus_Config;
     }
 
-    if equal_nocase(basename_with_extension, "FOCUS-CHANGELOG.txt") then lang = .Todo;
+    // if equal_nocase(basename_with_extension, "FOCUS-CHANGELOG.txt") then lang = .Todo;
 
     return lang;
 }
