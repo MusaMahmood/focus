@@ -432,10 +432,13 @@ TYPE_KEYWORDS :: string.[
     "char", "double", "float", "int", "long", "short", "void", "_Bool", "_Complex", "_Imaginary",
 
     // stdint types
-    "int8_t", "int16_t", "int32_t", "int64_t", "uint8_t", "uint16_t", "uint32_t", "uint64_t", "int_least8_t", "int_least16_t",
-    "int_least32_t", "int_least64_t", "uint_least8_t", "uint_least16_t", "uint_least32_t", "uint_least64_t", "int_fast8_t",
-    "int_fast16_t", "int_fast32_t", "int_fast64_t", "uint_fast8_t", "uint_fast16_t", "uint_fast32_t", "uint_fast64_t", "intptr_t",
-    "uintptr_t", "intmax_t", "uintmax_t", "wint_t", "size_t", "ptrdiff_t", "sig_atomic_t", "time_t", "clock_t",
+    "int8_t", "int16_t", "int32_t", "int64_t", "uint8_t", "uint16_t", "uint32_t", "uint64_t", 
+    // custom aliases
+    "s16", "s32", "s64", "s8", "u16", "u32", "u64", "u8", "f64", "f32", "bool", "b8", "b16", "b32", "b64", "string",
+    // does anyone even use these :hmm:
+    // "int_least8_t", "int_least16_t","int_least32_t", "int_least64_t", "uint_least8_t", "uint_least16_t", "uint_least32_t", "uint_least64_t", "int_fast8_t",
+    // "int_fast16_t", "int_fast32_t", "int_fast64_t", "uint_fast8_t", "uint_fast16_t", "uint_fast32_t", "uint_fast64_t", 
+    "intptr_t", "uintptr_t", "intmax_t", "uintmax_t", "wint_t", "size_t", "ptrdiff_t", "sig_atomic_t", "time_t", "clock_t",
 ];
 
 VALUE_KEYWORDS :: string.[
