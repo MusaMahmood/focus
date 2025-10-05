@@ -215,20 +215,21 @@ platform_get_fonts_dir :: () -> string {
 }
 
 platform_open_in_explorer :: (path: string, reveal := false) {
+    if path == "" then return; // Do nothing.
     path_backslashes := copy_string(path,, allocator = temp);
     path_overwrite_separators(path_backslashes, #char "\\");
     
-    
-    
-    // #TODO: Update to select when FP supports it!
-    if reveal {
-        path_stripped := path_strip_filename(path_backslashes);
-        ShellExecuteW(null, utf8_to_wide_new("open"), utf8_to_wide_new("fp.exe"),
-                    utf8_to_wide_new(path_stripped), null, SW_SHOWNORMAL);
-    } else {
-        ShellExecuteW(null, utf8_to_wide_new("open"), utf8_to_wide_new("fp.exe"),
-                    utf8_to_wide_new(path_backslashes), null, SW_SHOWNORMAL);
+    // handle special case for drive letters:
+    if path_backslashes[1] == #char ":" && path_backslashes.count <= 3 {
+        // This is probably a bug in fp 0.5.2, but we need two trailing backslashes for this to work properly. 
+        path_backslashes = tprint("%\\", path_backslashes);
     }
+    
+    // #NOTE: Updated for fp 0.5.2
+    // Maybe we should surround path with quotes
+    path_in_quotes := tprint("\"%\"", path_backslashes);
+    ShellExecuteW(null, utf8_to_wide_new("open"), utf8_to_wide_new("fp.exe"),
+                    utf8_to_wide_new(path_in_quotes), null, SW_SHOWNORMAL);
     
     // Old version
     // if reveal run_command("explorer", "/select,", path_backslashes);

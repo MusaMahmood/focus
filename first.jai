@@ -9,7 +9,7 @@
 // }
 
 // NOTE: Uncomment when releasing, comment out when not releasing
-VERSION :: "0.3.8";
+VERSION :: "0.3.8b";
 RELEASE_DATE :: "27 February 2025";
 
 #run,stallable build();
@@ -40,11 +40,12 @@ build :: () {
           case "release";
             optimized = true;
             build_dir = "build_release";
-            set_optimization(*options, .VERY_OPTIMIZED);
+            set_optimization(*options, .VERY_OPTIMIZED, preserve_debug_info=true);
             options.llvm_options.enable_split_modules = false;
             options.array_bounds_check = .ON;
             options.null_pointer_check = .ON;
             options.arithmetic_overflow_check = .OFF;
+          case "unsafe"; // see code block below
           case "debug";
           case "no_output";
             options.output_type = .NO_OUTPUT;
@@ -54,6 +55,18 @@ build :: () {
           case;
             compiler_report(tprint("Command-line argument #%, '%', is invalid. Valid options are: 'debug', 'release'.\n", it_index+1, arg));
         }
+    }
+    
+    // Doesn't work correctly in beta 0.1.096 -- it still generates a PDB.
+    if array_find(args, "unsafe") {
+        set_optimization(*options, .VERY_OPTIMIZED, preserve_debug_info=false);
+        options.emit_debug_info = .NONE;
+        options.output_executable_name = "focus_unsafe";
+        options.array_bounds_check = .OFF;
+        options.null_pointer_check = .OFF;
+        options.arithmetic_overflow_check = .OFF;
+        options.cast_bounds_check = .OFF;
+        options.dead_code_elimination = .ALL;
     }
 
     options.output_path = build_dir;
