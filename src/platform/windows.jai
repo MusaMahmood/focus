@@ -228,7 +228,7 @@ platform_open_in_explorer :: (path: string, reveal := false) {
     // #NOTE: Updated for fp 0.5.2
     // Maybe we should surround path with quotes
     path_in_quotes := tprint("\"%\"", path_backslashes);
-    ShellExecuteW(null, utf8_to_wide_new("open"), utf8_to_wide_new("fp.exe"),
+    ShellExecuteW(null, utf8_to_wide_new("open"), utf8_to_wide_new("fpilot.exe"),
                     utf8_to_wide_new(path_in_quotes), null, SW_SHOWNORMAL);
     
     // Old version
