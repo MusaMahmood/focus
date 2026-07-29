@@ -2,9 +2,11 @@ MIN_COMPILER_VERSION :: Version_Info.{ major = 0, minor = 2, micro = 29 };
 MAX_COMPILER_VERSION :: Version_Info.{ major = 0, minor = 2, micro = 99 };
 
 VERSION      :: #run -> string {
-    result, revision := run_command("git", "rev-parse", "--short", "HEAD", capture_and_return_output = true);
-    if revision return sprint("0.3.8-%", trim(revision));
-    return "0.3.8-dev";
+    result, git_branch := run_command("git", "branch", "--show-current", capture_and_return_output = true);
+    
+    result=, revision := run_command("git", "rev-parse", "--short", "HEAD", capture_and_return_output = true);
+    if revision || git_branch return sprint("0.3.9-%-%", trim(git_branch), trim(revision));
+    return "0.3.9-dev";
 }
 RELEASE_DATE :: #run -> string {
     current_time := to_calendar(current_time_consensus());

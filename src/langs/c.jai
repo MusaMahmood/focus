@@ -430,6 +430,7 @@ TYPE_KEYWORDS :: string.[
     "char", "_Decimal32", "_Decimal64", "_Decimal128", "double", "float", "int", "long", "short", "void", "_BitInt", "bool", "_Bool", "_Complex", "_Imaginary",
 
     // stdint types
+    "s16", "s32", "s64", "s8", "u16", "u32", "u64", "u8", "f64", "f32", "b8", "b16", "b32", "b64", "string",
     "char8_t", "int8_t", "int16_t", "int32_t", "int64_t", "uint8_t", "uint16_t", "uint32_t", "uint64_t", "int_least8_t", "int_least16_t",
     "int_least32_t", "int_least64_t", "uint_least8_t", "uint_least16_t", "uint_least32_t", "uint_least64_t", "int_fast8_t",
     "int_fast16_t", "int_fast32_t", "int_fast64_t", "uint_fast8_t", "uint_fast16_t", "uint_fast32_t", "uint_fast64_t", "intptr_t",
