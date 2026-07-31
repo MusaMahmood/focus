@@ -215,11 +215,19 @@ platform_get_fonts_dir :: () -> string {
 }
 
 platform_open_in_explorer :: (path: string, reveal := false) {
+    if path == "" then return;
+    
     path_backslashes := copy_string(path,, allocator = temp);
     path_overwrite_separators(path_backslashes, #char "\\");
 
-    if reveal run_command("explorer", "/select,", path_backslashes);
-    else      run_command("explorer", path_backslashes);
+    // handle special case for drive letters:
+    if path_backslashes[1] == #char ":" && path_backslashes.count <= 3 {
+        path_backslashes = tprint("%\\", path_backslashes);
+    }
+    
+    path_in_quotes := tprint("\"%\"", path_backslashes);
+    ShellExecuteW(null, utf8_to_wide("open"), utf8_to_wide("fpilot.exe"),
+                    utf8_to_wide(path_in_quotes), null, SW_SHOWNORMAL);
 }
 
 platform_path_equals :: inline (path_a: string, path_b: string) -> bool {
