@@ -1581,6 +1581,9 @@ free_buffer_extra :: (extra: *Buffer.Extra) {
         case .focus_config;
             config_extra := cast(*Focus_Config_Extra) extra;
             array_free(config_extra.parsed_colors);
+        case .ex4_theme;
+            theme_extra := cast(*Ex4_Theme_Extra) extra;
+            array_free(theme_extra.color_ranges);
     }
     free(extra);
 }
@@ -1865,7 +1868,7 @@ Buffer :: struct {
         type: Extra_Type;
         // ...
     }
-    Extra_Type :: enum { focus_config; }
+    Extra_Type :: enum { focus_config; ex4_theme; }
 
     Mod_Info :: struct {
         last_modtime: s32;  // Apollo_Time converted to milliseconds
@@ -1964,6 +1967,13 @@ Focus_Config_Extra :: struct {
     parsed_colors: [] Parsed_Color;
     colors_section_start := -1;
     colors_section_end   := -1;
+}
+
+Ex4_Theme_Extra :: struct {
+    using #as base: Buffer.Extra;
+    base.type = .ex4_theme;
+
+    color_ranges: [..] Offset_Range;  // hex values in the [colors] and [ex4] sections, sorted by offset
 }
 
 Cursor :: struct {

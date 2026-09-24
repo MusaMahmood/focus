@@ -1060,6 +1060,7 @@ focus_allocator: Allocator;
 #load "widgets/language_dialog.jai";
 #load "widgets/color_preview.jai";
 #load "widgets/color_picker.jai";
+#load "widgets/color_swatches.jai";
 
 #load "langs/common.jai";
 #load "langs/jai.jai";

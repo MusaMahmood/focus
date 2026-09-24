@@ -45,6 +45,8 @@ draw_frame :: () {
     panel_is_active, panel_editor_rect := maybe_draw_color_preview_panel(active_editor_rect);
     if panel_is_active then active_editor_rect = panel_editor_rect;
 
+    maybe_draw_ex4_theme_color_picker(active_editor_rect);
+
     panel_is_active, panel_editor_rect  = maybe_draw_build_panel();
     if panel_is_active then active_editor_rect = panel_editor_rect;
 
@@ -1544,6 +1546,12 @@ draw_editor :: (editor_id: s64, main_area: Rect, ui_id: Ui_Id, pane: *Editor_Pan
             draw_range(anim.coords_range, editor, buffer, visible_lines_start, visible_lines_end, text_origin, Color.PASTE_ANIMATION, alpha = xx (1 - t));
         }
         if editor_paste_animations.count > 0 then redraw_requested = true;
+
+        if buffer.lang == {
+            case .Ex4_Theme;    draw_ex4_theme_swatches   (editor, buffer, visible_offset_range, text_origin);
+            case .Focus_Config; #through;
+            case .Focus_Theme;  draw_focus_config_swatches(editor, buffer, visible_offset_range, text_origin);
+        }
 
         // Draw inactive cursors before text
         if !cursors_active && !search_bar_is_open(editor) && buffer_settings.cursor_as_block && !as_build_panel {

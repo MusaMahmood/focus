@@ -5,6 +5,14 @@ tokenize_ex4_config :: (buffer: *Buffer, start_offset := -1, count := -1) -> [] 
 
     known_directives :: string.["version", "name", "base"];
 
+    color_ranges: *[..] Offset_Range;
+    if buffer.lang == .Ex4_Theme && start_offset < 0 {
+        theme_extra := get_ex4_theme_extra(buffer);
+        array_reset_keeping_memory(*theme_extra.color_ranges);
+        color_ranges = *theme_extra.color_ranges;
+    }
+    in_color_section := false;
+
     while true {
         line, ok := ex4_next_line(buffer, *pos, end);
         if !ok break;
@@ -25,17 +33,30 @@ tokenize_ex4_config :: (buffer: *Buffer, start_offset := -1, count := -1) -> [] 
             ex4_highlight_directive(line, b, e, known_directives);
         } else if c == #char "[" {
             ex4_mark(line, b, e, ifx line.text[e - 1] == #char "]" then Token_Type.keyword else .error);
+            section := string.{ e - b, line.text.data + b };
+            in_color_section = section == "[colors]" || section == "[ex4]";
         } else {
-            highlight_key_value(line, b, e);
+            highlight_key_value(line, b, e, ifx in_color_section then color_ranges else null);
         }
     }
 
     return .[];
 }
 
+get_ex4_theme_extra :: (buffer: *Buffer) -> *Ex4_Theme_Extra {
+    assert(context.allocator.proc == focus_allocator.proc);
+    if buffer.extra && buffer.extra.type != .ex4_theme {
+        free_buffer_extra(buffer.extra);
+        buffer.extra = null;
+    }
+    if !buffer.extra then buffer.extra = New(Ex4_Theme_Extra);
+    return cast(*Ex4_Theme_Extra) buffer.extra;
+}
+
 Ex4_Line :: struct {
     text:   string;
     tokens: [] Token_Type;
+    offset: s64;
 }
 
 ex4_get_tokenize_range :: (buffer: *Buffer, start_offset: s64, count: s64) -> start: s64, end: s64 {
@@ -60,6 +81,7 @@ ex4_next_line :: (buffer: *Buffer, pos: *s64, end: s64) -> Ex4_Line, bool {
     line: Ex4_Line;
     line.text   = string.{ line_end - line_start, buffer.bytes.data  + line_start };
     line.tokens = .{ line_end - line_start, buffer.tokens.data + line_start };
+    line.offset = line_start;
     return line, true;
 }
 
@@ -116,7 +138,7 @@ ex4_highlight_directive :: (line: Ex4_Line, b: s64, e: s64, known_directives: []
 
 #scope_file
 
-highlight_key_value :: (line: Ex4_Line, b: s64, e: s64) {
+highlight_key_value :: (line: Ex4_Line, b: s64, e: s64, color_ranges: *[..] Offset_Range) {
     colon := b;
     while colon < e && line.text[colon] != #char ":"  colon += 1;
     if colon == e {
@@ -136,7 +158,9 @@ highlight_key_value :: (line: Ex4_Line, b: s64, e: s64) {
         if word_start == i break;
 
         word := string.{ i - word_start, line.text.data + word_start };
-        ex4_mark(line, word_start, i, ifx is_number(word) || is_hex_color(word) then Token_Type.number else .value);
+        is_color := is_hex_color(word);
+        ex4_mark(line, word_start, i, ifx is_number(word) || is_color then Token_Type.number else .value);
+        if is_color && color_ranges then array_add(color_ranges, .{ xx (line.offset + word_start), xx (line.offset + i) });
     }
 }
 
