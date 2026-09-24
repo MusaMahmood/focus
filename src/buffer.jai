@@ -1688,6 +1688,9 @@ get_tokenize_function :: (lang: Buffer.Lang) -> Tokenize_Function {
         case .Batch;                return tokenize_batch;
         case .Swift;                return tokenize_swift;
         case .Ini;                  return tokenize_ini;
+        case .Ex4_Theme;            return tokenize_ex4_config;
+        case .Ex4_Settings;         return tokenize_ex4_config;
+        case .Ex4_Executables;      return tokenize_ex4_executables;
         case .Focus_Config;         return tokenize_focus_config;
         case .Focus_Theme;          return tokenize_focus_config;
         case .Focus_Build_Panel;    return null;
@@ -1945,6 +1948,9 @@ Buffer :: struct {
         Swift;
         Shell;
         Ini;
+        Ex4_Theme;
+        Ex4_Settings;
+        Ex4_Executables;
         Focus_Config;
         Focus_Theme;
         Focus_Build_Panel;  // a fake lang to be assigned to the build panel instead of Plain_Text so that its tokens are preserved

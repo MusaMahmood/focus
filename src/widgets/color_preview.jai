@@ -310,6 +310,9 @@ get_language_sample_text :: (lang: Buffer.Lang) -> string {
         case .Swift;             return SAMPLE_Swift;
         case .Shell;             return SAMPLE_Shell;
         case .Ini;               return SAMPLE_Ini;
+        case .Ex4_Theme;         return SAMPLE_Ex4_Theme;
+        case .Ex4_Settings;      return SAMPLE_Ex4_Settings;
+        case .Ex4_Executables;   return SAMPLE_Ex4_Executables;
         case .Vue;               return SAMPLE_Vue;
 
         case .Plain_Text;        #through;

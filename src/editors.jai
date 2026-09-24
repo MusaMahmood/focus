@@ -2367,6 +2367,9 @@ get_lang_from_path :: (full_path: string) -> Buffer.Lang {
 
         case "ini";             lang = .Ini;
 
+        case "ex4-theme";       lang = .Ex4_Theme;
+        case "ex4-config";      lang = .Ex4_Settings;
+
         case "diff";            lang = .Diff;
         case "patch";           lang = .Diff;
         
@@ -2378,6 +2381,7 @@ get_lang_from_path :: (full_path: string) -> Buffer.Lang {
     }
 
     if equal_nocase(basename_with_extension, "FOCUS-CHANGELOG.txt") then lang = .Todo;
+    if equal_nocase(basename_with_extension, "executables.ex4-config") then lang = .Ex4_Executables;
 
     return lang;
 }
@@ -4521,6 +4525,9 @@ toggle_comment :: (editor: *Editor, buffer: *Buffer, is_fallback := false) {
         case .Shell;        #through;
         case .Focus_Config; #through;
         case .Toml        ; #through;
+        case .Ex4_Theme;       #through;
+        case .Ex4_Settings;    #through;
+        case .Ex4_Executables; #through;
         case .Focus_Theme;
             comment = "#";
 
@@ -4774,6 +4781,9 @@ toggle_block_comment :: (editor: *Editor, buffer: *Buffer, is_fallback := false)
         case .Ini;          #through;
         case .Focus_Config; #through;
         case .Toml;         #through;
+        case .Ex4_Theme;       #through;
+        case .Ex4_Settings;    #through;
+        case .Ex4_Executables; #through;
         case .Focus_Theme;
             assert(!is_fallback, "Infinite recursion");
             toggle_comment(editor, buffer, true);

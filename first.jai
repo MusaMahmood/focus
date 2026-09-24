@@ -5,8 +5,8 @@ VERSION      :: #run -> string {
     result, git_branch := run_command("git", "branch", "--show-current", capture_and_return_output = true);
     
     result=, revision := run_command("git", "rev-parse", "--short", "HEAD", capture_and_return_output = true);
-    if revision || git_branch return sprint("0.3.9-%-%", trim(git_branch), trim(revision));
-    return "0.3.9-dev";
+    if revision || git_branch return sprint("0.3.10-%-%", trim(git_branch), trim(revision));
+    return "0.3.10-dev";
 }
 RELEASE_DATE :: #run -> string {
     current_time := to_calendar(current_time_consensus());

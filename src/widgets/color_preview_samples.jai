@@ -1458,6 +1458,52 @@ StillOk = true
 
 LANG_INI
 
+SAMPLE_Ex4_Theme :: #string EX4_THEME
+# Ex4 ImGui theme.
+@version 1
+@name Candy
+@base ex4
+
+[sizes]
+WindowRounding:                   4
+FramePadding:                     6 3
+AntiAliasedLines:                 true
+
+[colors]
+Text:                             BFC9DBFF
+WindowBg:                         15212AFF
+Border:                           4C4C4C80
+
+[ex4]
+# Colors Ex4 draws with that have no ImGui style slot.
+accent:                           E03D90FF
+EX4_THEME
+
+SAMPLE_Ex4_Settings :: #string EX4_SETTINGS
+# Ex4 user settings.
+@version 1
+
+[ui]
+theme: Candy
+EX4_SETTINGS
+
+SAMPLE_Ex4_Executables :: #string EX4_EXECUTABLES
+@version 3
+
+[machine WORKSTATION]       # the machine name goes here
+Projects                 => "C:\Users\Public\Projects"
+Search                   => https://duckduckgo.com/?q=focus#results type=url
+Calculator               => calc
+Focus Editor             => C:\Tools\focus\focus.exe
+                            find="C:\Tools\focus\projects\ *.focus-config"
+                            args="-project %"
+Word                     => "C:\Program Files\Microsoft Office\root\Office16\WINWORD.EXE"
+                            find="*.docx|*.doc"
+
+[machine "Studio ""Mac"""]
+Safari                   => /Applications/Safari.app
+EX4_EXECUTABLES
+
 SAMPLE_Vue :: #string LANG_VUE
 <script setup lang="ts">
 import Menu from './Menu.vue';
