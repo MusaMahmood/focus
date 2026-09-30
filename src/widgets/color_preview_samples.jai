@@ -1485,6 +1485,35 @@ SAMPLE_Ex4_Settings :: #string EX4_SETTINGS
 
 [ui]
 theme: Candy
+
+[window]
+# Initial size, as a fraction of the monitor it opens on.
+width_fraction: 0.80
+height_fraction: 0.75
+
+[font]
+# Text size is size_base * scale_main * the monitor's DPI scale. The font size hotkeys change scale_main.
+size_base: 12.0
+scale_main: 1.25
+
+[search]
+# Memory Search History may hold, in MB. Past it the oldest searches are dropped.
+history_mb: 1.00
+# Directories Ex4 indexes for search, one per line. Changes take effect at the next start.
+root: ~/Projects
+root: ~/Documents
+# root: /Volumes/Archive
+# Folders left out of the index, one per line: a path, or a bare name to skip every folder of that name.
+exclude: ~/Library
+exclude: node_modules
+
+[hotkeys]
+# Key combination            Action
+Cmd-Shift-W                  program_exit
+Cmd-P                        switch_to_password_mode
+F5                           search_refresh_results
+Opt-R                        search_refresh_results
+Cmd--                        decrease_font_size
 EX4_SETTINGS
 
 SAMPLE_Ex4_Executables :: #string EX4_EXECUTABLES

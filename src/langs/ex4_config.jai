@@ -1,4 +1,5 @@
-// Highlights `.ex4-theme` and `settings.ex4-config` files: `@directive value`, `[section]`, `Key: value` and `#` comments.
+// Highlights `.ex4-theme` and `settings.ex4-config` files: `@directive value`, `[section]`, `Key: value`,
+// `Ctrl-Shift-W  action` lines under `[hotkeys]` (Ex4 1.17+), and `#` comments.
 tokenize_ex4_config :: (buffer: *Buffer, start_offset := -1, count := -1) -> [] Buffer_Region {
     pos, end := ex4_get_tokenize_range(buffer, start_offset, count);
     memset(buffer.tokens.data + pos, xx Token_Type.default, end - pos);
@@ -11,7 +12,8 @@ tokenize_ex4_config :: (buffer: *Buffer, start_offset := -1, count := -1) -> [] 
         array_reset_keeping_memory(*theme_extra.color_ranges);
         color_ranges = *theme_extra.color_ranges;
     }
-    in_color_section := false;
+    in_color_section   := false;
+    in_hotkeys_section := false;
 
     while true {
         line, ok := ex4_next_line(buffer, *pos, end);
@@ -34,7 +36,10 @@ tokenize_ex4_config :: (buffer: *Buffer, start_offset := -1, count := -1) -> [] 
         } else if c == #char "[" {
             ex4_mark(line, b, e, ifx line.text[e - 1] == #char "]" then Token_Type.keyword else .error);
             section := string.{ e - b, line.text.data + b };
-            in_color_section = section == "[colors]" || section == "[ex4]";
+            in_color_section   = section == "[colors]" || section == "[ex4]";
+            in_hotkeys_section = section == "[hotkeys]";
+        } else if in_hotkeys_section {
+            highlight_hotkey_binding(line, b, e);
         } else {
             highlight_key_value(line, b, e, ifx in_color_section then color_ranges else null);
         }
@@ -138,7 +143,54 @@ ex4_highlight_directive :: (line: Ex4_Line, b: s64, e: s64, known_directives: []
 
 #scope_file
 
-highlight_key_value :: (line: Ex4_Line, b: s64, e: s64, color_ranges: *[..] Offset_Range) {
+// Mirrors Ex4's hotkey_parse_line and parse_key_combo: modifiers joined to the key by '-', whitespace,
+// then the action. An empty modifier is the '-' key itself, as in `Ctrl--`. Key names are not
+// checked; Ex4 accepts any Dear ImGui key name.
+highlight_hotkey_binding :: (line: Ex4_Line, b: s64, e: s64) {
+    split := e;
+    while split > b && !ascii_is_space(line.text[split - 1])  split -= 1;
+    if split == b {
+        ex4_mark(line, b, e, .error);
+        return;
+    }
+
+    action := string.{ e - split, line.text.data + split };
+    ex4_mark(line, split, e, ifx array_find(EX4_HOTKEY_ACTIONS, action) then Token_Type.function else .error);
+
+    combo_start, combo_end := ex4_trim_range(line.text, b, split);
+    i := combo_start;
+    while true {
+        dash := i;
+        while dash < combo_end && line.text[dash] != #char "-"  dash += 1;
+        if dash == combo_end || dash == i  break;
+
+        modifier := to_lower_copy(string.{ dash - i, line.text.data + i },, temp);
+        ex4_mark(line, i, dash, ifx array_find(EX4_HOTKEY_MODIFIERS, modifier) then Token_Type.value else .error);
+        ex4_mark(line, dash, dash + 1, .punctuation);
+        i = dash + 1;
+    }
+    if i == combo_end  ex4_mark(line, combo_start, combo_end, .error);   // modifiers but no key
+}
+
+EX4_HOTKEY_MODIFIERS :: string.["ctrl", "control", "cmd", "command", "shift", "alt", "opt", "option"];
+
+// Keep in step with hotkey_actions_build in Ex4's src/ui/imgui_keyboard.jai.
+EX4_HOTKEY_ACTIONS :: string.[
+    "program_exit", "minimize_to_tray", "switch_to_password_mode", "switch_to_bitlocker_ui",
+    "bitlocker_open_channel", "bitlocker_close_channel", "toggle_show_password", "toggle_show_history",
+    "lock_password_mode", "dismiss", "password_mode_submit", "unlock_all_drives", "toggle_debug_panel",
+    "toggle_style_editor", "toggle_frame_times", "save", "create_new_entry", "copy", "copy_alt",
+    "copy_username", "set_keyboard_search_focus", "show_in_file_explorer", "launch_as_administrator",
+    "search_reset", "delete_password_entry", "increment_search_filter", "search_exact_match_toggle",
+    "search_match_whole_word_toggle", "search_sort_type_toggle", "search_sort_order_toggle",
+    "search_refresh_results", "open_selected_path_in_terminal", "open_selected_path_in_elevated_terminal",
+    "open_selected_path_in_focus", "open_selected_path_in_vscode", "open_selected_path_in_10x_editor",
+    "next_item", "previous_item", "selected_item_up", "selected_item_down", "selected_item_up_multi",
+    "selected_item_down_multi", "scroll_up_page", "scroll_down_page", "scroll_up_page_alt",
+    "scroll_down_page_alt", "decrease_font_size", "increase_font_size",
+];
+
+highlight_key_value ::(line: Ex4_Line, b: s64, e: s64, color_ranges: *[..] Offset_Range) {
     colon := b;
     while colon < e && line.text[colon] != #char ":"  colon += 1;
     if colon == e {
