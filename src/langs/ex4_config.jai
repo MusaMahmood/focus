@@ -1,5 +1,6 @@
 // Highlights `.ex4-theme` and `settings.ex4-config` files: `@directive value`, `[section]`, `Key: value`,
-// `Ctrl-Shift-W  action` lines under `[hotkeys]` (Ex4 1.17+), and `#` comments.
+// `Ctrl-Shift-W  action` lines under `[hotkeys]` (Ex4 1.17+) and `[global_hotkeys]` (Ex4 1.20.10+),
+// and `#` comments.
 tokenize_ex4_config :: (buffer: *Buffer, start_offset := -1, count := -1) -> [] Buffer_Region {
     pos, end := ex4_get_tokenize_range(buffer, start_offset, count);
     memset(buffer.tokens.data + pos, xx Token_Type.default, end - pos);
@@ -12,8 +13,8 @@ tokenize_ex4_config :: (buffer: *Buffer, start_offset := -1, count := -1) -> [] 
         array_reset_keeping_memory(*theme_extra.color_ranges);
         color_ranges = *theme_extra.color_ranges;
     }
-    in_color_section   := false;
-    in_hotkeys_section := false;
+    in_color_section := false;
+    hotkey_actions: [] string;   // the section's actions; empty outside a hotkeys section
 
     while true {
         line, ok := ex4_next_line(buffer, *pos, end);
@@ -36,10 +37,12 @@ tokenize_ex4_config :: (buffer: *Buffer, start_offset := -1, count := -1) -> [] 
         } else if c == #char "[" {
             ex4_mark(line, b, e, ifx line.text[e - 1] == #char "]" then Token_Type.keyword else .error);
             section := string.{ e - b, line.text.data + b };
-            in_color_section   = section == "[colors]" || section == "[ex4]";
-            in_hotkeys_section = section == "[hotkeys]";
-        } else if in_hotkeys_section {
-            highlight_hotkey_binding(line, b, e);
+            in_color_section = section == "[colors]" || section == "[ex4]";
+            if section == "[hotkeys]"              hotkey_actions = EX4_HOTKEY_ACTIONS;
+            else if section == "[global_hotkeys]"  hotkey_actions = EX4_GLOBAL_HOTKEY_ACTIONS;
+            else                                   hotkey_actions = .[];
+        } else if hotkey_actions.count {
+            highlight_hotkey_binding(line, b, e, hotkey_actions);
         } else {
             highlight_key_value(line, b, e, ifx in_color_section then color_ranges else null);
         }
@@ -146,7 +149,7 @@ ex4_highlight_directive :: (line: Ex4_Line, b: s64, e: s64, known_directives: []
 // Mirrors Ex4's hotkey_parse_line and parse_key_combo: modifiers joined to the key by '-', whitespace,
 // then the action. An empty modifier is the '-' key itself, as in `Ctrl--`. Key names are not
 // checked; Ex4 accepts any Dear ImGui key name.
-highlight_hotkey_binding :: (line: Ex4_Line, b: s64, e: s64) {
+highlight_hotkey_binding :: (line: Ex4_Line, b: s64, e: s64, actions: [] string) {
     split := e;
     while split > b && !ascii_is_space(line.text[split - 1])  split -= 1;
     if split == b {
@@ -155,7 +158,7 @@ highlight_hotkey_binding :: (line: Ex4_Line, b: s64, e: s64) {
     }
 
     action := string.{ e - split, line.text.data + split };
-    ex4_mark(line, split, e, ifx array_find(EX4_HOTKEY_ACTIONS, action) then Token_Type.function else .error);
+    ex4_mark(line, split, e, ifx array_find(actions, action) then Token_Type.function else .error);
 
     combo_start, combo_end := ex4_trim_range(line.text, b, split);
     i := combo_start;
@@ -189,6 +192,9 @@ EX4_HOTKEY_ACTIONS :: string.[
     "selected_item_down_multi", "scroll_up_page", "scroll_down_page", "scroll_up_page_alt",
     "scroll_down_page_alt", "decrease_font_size", "increase_font_size", "reset_window",
 ];
+
+// Keep in step with global_hotkey_actions_build in Ex4's src/ui/imgui_keyboard.jai.
+EX4_GLOBAL_HOTKEY_ACTIONS :: string.["bring_to_foreground", "open_password_mode"];
 
 highlight_key_value ::(line: Ex4_Line, b: s64, e: s64, color_ranges: *[..] Offset_Range) {
     colon := b;
