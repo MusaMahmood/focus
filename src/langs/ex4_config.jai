@@ -186,7 +186,7 @@ EX4_HOTKEY_ACTIONS :: string.[
     "copy_username", "set_keyboard_search_focus", "show_in_file_explorer", "launch_as_administrator",
     "search_reset", "delete_password_entry", "increment_search_filter", "search_exact_match_toggle",
     "search_match_whole_word_toggle", "search_sort_type_toggle", "search_sort_order_toggle",
-    "search_refresh_results", "open_selected_path_in_terminal", "open_selected_path_in_elevated_terminal",
+    "search_refresh_results", "search_backend_toggle", "open_selected_path_in_terminal", "open_selected_path_in_elevated_terminal",
     "open_selected_path_in_focus", "open_selected_path_in_vscode", "open_selected_path_in_10x_editor",
     "next_item", "previous_item", "selected_item_up", "selected_item_down", "selected_item_up_multi",
     "selected_item_down_multi", "scroll_up_page", "scroll_down_page", "scroll_up_page_alt",
