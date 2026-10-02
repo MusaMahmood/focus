@@ -190,7 +190,7 @@ EX4_HOTKEY_ACTIONS :: string.[
     "open_selected_path_in_focus", "open_selected_path_in_vscode", "open_selected_path_in_10x_editor",
     "next_item", "previous_item", "selected_item_up", "selected_item_down", "selected_item_up_multi",
     "selected_item_down_multi", "scroll_up_page", "scroll_down_page", "scroll_up_page_alt",
-    "scroll_down_page_alt", "decrease_font_size", "increase_font_size", "reset_window",
+    "scroll_down_page_alt", "decrease_font_size", "increase_font_size", "reset_window", "reset_layout",
 ];
 
 // Keep in step with global_hotkey_actions_build in Ex4's src/ui/imgui_keyboard.jai.
