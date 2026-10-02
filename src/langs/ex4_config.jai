@@ -182,7 +182,7 @@ EX4_HOTKEY_ACTIONS :: string.[
     "program_exit", "minimize_to_tray", "switch_to_password_mode", "switch_to_bitlocker_ui",
     "bitlocker_open_channel", "bitlocker_close_channel", "toggle_show_password", "toggle_show_history",
     "lock_password_mode", "dismiss", "password_mode_submit", "unlock_all_drives", "toggle_debug_panel",
-    "toggle_style_editor", "toggle_frame_times", "save", "create_new_entry", "copy", "copy_alt",
+    "toggle_logger_panel", "toggle_style_editor", "toggle_frame_times", "save", "create_new_entry", "copy", "copy_alt",
     "copy_username", "set_keyboard_search_focus", "show_in_file_explorer", "launch_as_administrator",
     "search_reset", "delete_password_entry", "increment_search_filter", "search_exact_match_toggle",
     "search_match_whole_word_toggle", "search_sort_type_toggle", "search_sort_order_toggle",
