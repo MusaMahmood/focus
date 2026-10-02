@@ -121,7 +121,7 @@ highlight_attributes :: (line: Ex4_Line, from: s64, to: s64) {
             return;
         }
 
-        known_key := key == "type" || key == "find" || key == "args" || key == "dir" || key == "shell" || key == "admin";
+        known_key := key == "type" || key == "find" || key == "args" || key == "dir" || key == "shell" || key == "admin" || key == "exit_on_success";
         ex4_mark(line, key_start, i, ifx known_key then Token_Type.attribute else .error);
         ex4_mark(line, i, i + 1, .punctuation);
         i += 1;
